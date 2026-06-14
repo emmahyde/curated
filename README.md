@@ -18,6 +18,8 @@ General-purpose agentic procedures — original, project-agnostic.
 | Skill | What it does |
 |-------|--------------|
 | [diagnose](skills/diagnose) | Disciplined repro → minimise → hypothesise → instrument → fix loop for hard bugs and perf regressions. Builds the feedback loop first. |
+| [askme](skills/askme) | Verbalized-Sampling intent exploration before planning — sample weighted intent hypotheses with a falsifier each, then fire the maximum batch of clarifying questions. Three modes (exhaustive / collaborative / adversarial). |
+| [duet](skills/duet) | Two-party posture — user directs, agent executes; every genuine fork surfaced as a pick at decision-time via batched questions. Distributes review across the task instead of one giant diff at the end. Builds on `askme`'s VS protocol. |
 | [grill-with-docs](skills/grill-with-docs) | Stress-test a plan against your domain model and docs; sharpen terminology and update `CONTEXT.md` / ADRs inline as decisions crystallise. |
 | [improve-codebase-architecture](skills/improve-codebase-architecture) | Surface deepening refactors that turn shallow modules into deep ones, guided by `CONTEXT.md` and `docs/adr/`. |
 | [audit](skills/audit) | Structured PASS/FAIL audit of any target against any criteria, returning a violations table with fixes. |

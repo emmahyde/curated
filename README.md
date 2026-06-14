@@ -49,4 +49,4 @@ Book-derived reference skills — load on demand while coding.
 
 | Plugin | What it does |
 |--------|--------------|
-| [discuss-and-execute](plugins/discuss-and-execute) | Discuss implementation decisions, then execute with parallel agents in coordinated waves. A context → discuss → plan → execute pipeline with four supporting agents (codebase-mapper, planner, implementer, researcher). |
+| [waves](plugins/waves) | Discuss implementation decisions, then execute with parallel agents in coordinated waves. A context → discuss → plan → execute pipeline with four supporting agents (codebase-mapper, planner, implementer, researcher). |

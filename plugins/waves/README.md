@@ -1,4 +1,4 @@
-# discuss-and-execute
+# waves
 
 Discuss implementation decisions, then execute with parallel agents in coordinated waves. Surface conventions, concerns, and reusable code early — so agents build it right the first time.
 
@@ -60,7 +60,7 @@ flowchart LR
 Via the Guideline plugin marketplace, or directly:
 
 ```bash
-claude --plugin-dir /path/to/discuss-and-execute
+claude --plugin-dir /path/to/waves
 ```
 
 ## Usage

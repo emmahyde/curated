@@ -1,4 +1,4 @@
-# discuss-and-execute
+# waves
 
 Discuss implementation decisions, then execute with parallel agents in coordinated waves.
 
@@ -197,7 +197,7 @@ Orchestrates the full pipeline: gather-context (if needed) -> discuss --auto -> 
 ## Plugin Structure
 
 ```text
-discuss-and-execute/
+waves/
   .claude-plugin/plugin.json
   AGENTS.md                            # this file
   CLAUDE.md                            # -> @AGENTS.md

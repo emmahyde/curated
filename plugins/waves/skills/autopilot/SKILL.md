@@ -1,6 +1,6 @@
 ---
 description: >-
-  Runs the full discuss-and-execute pipeline end-to-end with minimal human
+  Runs the full waves pipeline end-to-end with minimal human
   intervention. Gather context, automated panel discussion with three technical
   stakeholders, plan waves, execute, and pre-ship audit — all in one invocation.
   <triggers>

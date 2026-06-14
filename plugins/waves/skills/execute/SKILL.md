@@ -128,7 +128,7 @@ _Wave <N>: [theme] — [count] tasks dispatching..._
 **Implementation sub-wave:**
 
 1. Spawn implementer subagents in parallel (one per task)
-   - `subagent_type: "discuss-and-execute:implementer"`
+   - `subagent_type: "waves:implementer"`
    - `name: "impl-<WAVE>-<TASK>"` (e.g., `impl-1-1`)
    - `run_in_background: true`
    - Prompt from implement template above

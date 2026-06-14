@@ -30,7 +30,7 @@ General-purpose agentic procedures — original, project-agnostic.
 | [passoff](skills/passoff) | Token-conservative session handoff — symbolic state summary plus literal `TaskCreate` seeds to rehydrate a cleared task list. |
 | [prompt-master](skills/prompt-master) | Generate optimized prompts tuned per AI tool and model. |
 | [search-web](skills/search-web) | Budget-disciplined web research: index a source corpus in 1–2 searches, batch-fetch, then reason over local files. |
-| [source-to-skill](skills/source-to-skill) | Convert a source — repo, docs, transcript — into a structured agent skill. |
+| [source-to-skill](skills/source-to-skill) | Convert any source — repo, script, API docs, paper, or a whole book — into a best-fit SKILL.md. Books route to a knowledge-base pipeline (chapters + glossary + patterns + cheatsheet) via a bundled multi-format extractor (PDF/EPUB/DOCX/MOBI). |
 
 ## Knowledge bases
 

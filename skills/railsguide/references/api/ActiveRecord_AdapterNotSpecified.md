@@ -1,0 +1,1 @@
+Raised when adapter not specified on connection (or configuration file `config/database.yml` misses adapter field).

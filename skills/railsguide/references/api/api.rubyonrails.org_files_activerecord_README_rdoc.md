@@ -1,0 +1,162 @@
+# Active Record – Object-relational mapping in Rails
+Active Record connects classes to relational database tables to establish an almost zero-configuration persistence layer for applications. The library provides a base class that, when subclassed, sets up a mapping between the new class and an existing table in the database. In the context of an application, these classes are commonly referred to as **models**. Models can also be connected to other models; this is done by defining **associations**.
+Active Record relies heavily on naming in that it uses class and association names to establish mappings between respective database tables and foreign key columns. Although these mappings can be defined explicitly, it’s recommended to follow naming conventions, especially when getting started with the library.
+You can read more about Active Record in the [Active Record Basics](https://guides.rubyonrails.org/active_record_basics.html) guide.
+A short rundown of some of the major features:
+  * Automated mapping between classes and tables, attributes and columns.
+
+```
+class Product  ActiveRecord::Base
+
+```
+
+The Product class is automatically mapped to the table named “products”, which might look like this:
+
+```
+CREATE TABLE products (
+   bigint NOT NULL auto_increment,
+  name varchar(255),
+  PRIMARY KEY  ()
+);
+```
+
+This would also define the following accessors: `Product#name` and `Product#name=(new_name)`.
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Base.html)
+  * Associations between objects defined by simple class methods.
+
+```
+class Firm  ActiveRecord::Base
+  has_many   :clients
+  has_one    :account
+  belongs_to :conglomerate
+
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html)
+  * Aggregations of value objects.
+
+```
+class Account  ActiveRecord::Base
+  composed_of :balance, class_name: 'Money',
+              mapping: %w(balance amount)
+  composed_of :address,
+              mapping: [%w(address_street street), %w(address_city city)]
+
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Aggregations/ClassMethods.html)
+  * Validation rules that can differ for new or existing objects.
+
+```
+class Account  ActiveRecord::Base
+  validates :subdomain, :name, :email_address, :password, presence:
+  validates :subdomain, uniqueness:
+  validates :terms_of_service, acceptance: ,  :create
+  validates :password, :email_address, confirmation: ,  :create
+
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Validations.html)
+  * Callbacks available for the entire life cycle (instantiation, saving, destroying, validating, etc.).
+
+```
+class Person  ActiveRecord::Base
+  before_destroy :invalidate_payment_plan
+
+# the `invalidate_payment_plan` method gets called just before Person#destroy
+
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)
+  * Inheritance hierarchies.
+
+```
+class Company  ActiveRecord::Base;
+class Firm  Company;
+class Client  Company;
+class PriorityClient  Client;
+
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Base.html)
+  * Transactions.
+
+# Database transaction
+Account.transaction
+  david.withdrawal()
+  mary.deposit()
+
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Transactions/ClassMethods.html)
+  * Reflections on columns, associations, and aggregations.
+
+```
+reflection = Firm.reflect_on_association(:clients)
+reflection.klass # => Client (class)
+Firm.columns # Returns an array of column descriptors for the firms table
+
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Reflection/ClassMethods.html)
+  * Database abstraction through simple adapters.
+
+# connect to SQLite3
+ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'dbfile.sqlite3')
+
+# connect to MySQL with authentication
+ActiveRecord::Base.establish_connection(
+  adapter:  'mysql2',
+  host:     'localhost',
+  username: 'me',
+  password: 'secret',
+  database: 'activerecord'
+)
+
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Base.html) and read about the built-in support for [MySQL](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/Mysql2Adapter.html), [PostgreSQL](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/PostgreSQLAdapter.html), and [SQLite3](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SQLite3Adapter.html).
+  * Logging support for [Log4r](https://github.com/colbygk/log4r) and [Logger](https://docs.ruby-lang.org/en/master/Logger.html).
+
+```
+ActiveRecord::Base.logger = ActiveSupport::Logger.(STDOUT)
+ActiveRecord::Base.logger = Log4r::Logger.('Application Log')
+
+* Database agnostic schema management with Migrations.
+
+```
+class AddSystemSettings  ActiveRecord::Migration[8.1]
+
+create_table :system_settings  ||
+      .string  :name
+      .string  :label
+      .text    :value
+      .string  :type
+      .integer :position
+
+SystemSetting.create name: 'notice', label: 'Use notice?', value:
+
+drop_table :system_settings
+
+[Learn more](https://api.rubyonrails.org/classes/ActiveRecord/Migration.html)
+
+## Philosophy
+Active Record is an implementation of the object-relational mapping (ORM) [pattern](https://www.martinfowler.com/eaaCatalog/activeRecord.html) by the same name described by Martin Fowler:
+> “An object that wraps a row in a database table or view, encapsulates the database access, and adds domain logic on that data.”
+Active Record attempts to provide a coherent wrapper as a solution for the inconvenience that is object-relational mapping. The prime directive for this mapping has been to minimize the amount of code needed to build a real-world domain model. This is made possible by relying on a number of conventions that make it easy for Active Record to infer complex relations and structures from a minimal amount of explicit direction.
+Convention over Configuration:
+  * No XML files!
+  * Lots of reflection and run-time extension
+  * Magic is not inherently a bad word
+
+Admit the Database:
+  * Lets you drop down to SQL for odd cases and performance
+  * Doesn’t attempt to duplicate or replace data definitions
+
+## Download and installation
+The latest version of Active Record can be installed with RubyGems:
+
+```
+$ gem install activerecord
+```
+
+Source code can be downloaded as part of the Rails project on GitHub:
+  * [github.com/rails/rails/tree/main/activerecord](https://github.com/rails/rails/tree/main/activerecord)
+
+## License
+Active Record is released under the MIT license:
+  * [opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)
+
+## Support
+API documentation is at:
+  * [api.rubyonrails.org](https://api.rubyonrails.org)
+
+Bug reports for the Ruby on Rails project can be filed here:
+  * [github.com/rails/rails/issues](https://github.com/rails/rails/issues)
+
+Feature requests should be discussed on the rubyonrails-core forum here:
+  * [discuss.rubyonrails.org/c/rubyonrails-core](https://discuss.rubyonrails.org/c/rubyonrails-core)

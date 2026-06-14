@@ -1,0 +1,1 @@
+Raised when unserialized object’s type mismatches one specified for serializable field.

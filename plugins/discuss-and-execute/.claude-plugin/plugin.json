@@ -1,0 +1,8 @@
+{
+  "name": "discuss-and-execute",
+  "version": "0.2.1",
+  "description": "Discuss implementation decisions, then execute with parallel agents in coordinated waves",
+  "author": {
+    "name": "Emma Hyde"
+  }
+}

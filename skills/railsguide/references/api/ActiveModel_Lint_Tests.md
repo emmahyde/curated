@@ -1,0 +1,94 @@
+## Active Model Lint Tests
+You can test whether an object is compliant with the Active Model [`API`](https://api.rubyonrails.org/classes/ActiveModel/API.html) by including [`ActiveModel::Lint::Tests`](https://api.rubyonrails.org/classes/ActiveModel/Lint/Tests.html) in your TestCase. It will include tests that tell you whether your object is fully compliant, or if not, which aspects of the [`API`](https://api.rubyonrails.org/classes/ActiveModel/API.html) are not implemented.
+Note an object is not required to implement all APIs in order to work with Action Pack. This module only intends to provide guidance in case you want all features out of the box.
+These tests do not attempt to determine the semantic correctness of the returned values. For instance, you could implement `valid?` to always return `true`, and the tests would pass. It is up to you to ensure that the values are semantically meaningful.
+Objects you pass in are expected to return a compliant object from a call to `to_model`. It is perfectly fine for `to_model` to return `self`.
+Methods
+
+T
+
+## Instance Public methods
+
+###  **test_errors_aref**() [Link](https://api.rubyonrails.org/classes/ActiveModel/Lint/Tests.html#method-i-test_errors_aref)
+Passes if the object’s model responds to `errors` and if calling `[](attribute)` on the result of this method returns an array. Fails otherwise.
+`errors[attribute]` is used to retrieve the errors of a model for a given attribute. If errors are present, the method should return an array of strings that are the errors for the attribute in question. If localization is used, the strings should be localized for the current locale. If no error is present, the method should return an empty array.
+Source: [show](javascript:toggleSource\('method-i-test_errors_aref_source'\)) | [on GitHub](https://github.com/rails/rails/blob/fa8f0812160665bff083a089d2bb2fc1817ea03e/activemodel/lib/active_model/lint.rb#L102)
+
+```
+
+# File activemodel/lib/active_model/lint.rb, line 102
+def test_errors_aref
+  assert_respond_to model, :errors
+  assert_equal [], model.errors[:hello], "errors#[] should return an empty Array"
+end
+```
+
+###  **test_model_naming**() [Link](https://api.rubyonrails.org/classes/ActiveModel/Lint/Tests.html#method-i-test_model_naming)
+Passes if the object’s model responds to `model_name` both as an instance method and as a class method, and if calling this method returns a string with some convenience methods: `:human`, `:singular` and `:plural`.
+Check [`ActiveModel::Naming`](https://api.rubyonrails.org/classes/ActiveModel/Naming.html) for more information.
+Source: [show](javascript:toggleSource\('method-i-test_model_naming_source'\)) | [on GitHub](https://github.com/rails/rails/blob/fa8f0812160665bff083a089d2bb2fc1817ea03e/activemodel/lib/active_model/lint.rb#L81)
+
+# File activemodel/lib/active_model/lint.rb, line 81
+def test_model_naming
+  assert_respond_to model.class, :model_name
+  model_name = model.class.model_name
+  assert_respond_to model_name, :to_str
+  assert_respond_to model_name.human, :to_str
+  assert_respond_to model_name.singular, :to_str
+  assert_respond_to model_name.plural, :to_str
+
+assert_respond_to model, :model_name
+  assert_equal model.model_name, model.class.model_name
+end
+```
+
+###  **test_persisted?**() [Link](https://api.rubyonrails.org/classes/ActiveModel/Lint/Tests.html#method-i-test_persisted-3F)
+Passes if the object’s model responds to `persisted?` and if calling this method returns either `true` or `false`. Fails otherwise.
+`persisted?` is used when calculating the URL for an object. If the object is not persisted, a form for that object, for instance, will route to the create action. If it is persisted, a form for the object will route to the update action.
+Source: [show](javascript:toggleSource\('method-i-test_persisted-3F_source'\)) | [on GitHub](https://github.com/rails/rails/blob/fa8f0812160665bff083a089d2bb2fc1817ea03e/activemodel/lib/active_model/lint.rb#L70)
+
+# File activemodel/lib/active_model/lint.rb, line 70
+def test_persisted?
+  assert_respond_to model, :persisted?
+  assert_boolean model.persisted?, "persisted?"
+end
+```
+
+###  **test_to_key**() [Link](https://api.rubyonrails.org/classes/ActiveModel/Lint/Tests.html#method-i-test_to_key)
+Passes if the object’s model responds to `to_key` and if calling this method returns `nil` when the object is not persisted. Fails otherwise.
+`to_key` returns an [`Enumerable`](https://api.rubyonrails.org/classes/Enumerable.html) of all (primary) key attributes of the model, and is used to a generate unique DOM id for the object.
+Source: [show](javascript:toggleSource\('method-i-test_to_key_source'\)) | [on GitHub](https://github.com/rails/rails/blob/fa8f0812160665bff083a089d2bb2fc1817ea03e/activemodel/lib/active_model/lint.rb#L31)
+
+# File activemodel/lib/active_model/lint.rb, line 31
+def test_to_key
+  assert_respond_to model, :to_key
+  def_method(model, :persisted?) { false }
+  assert model.to_key.nil?, "to_key should return nil when `persisted?` returns false"
+end
+```
+
+###  **test_to_param**() [Link](https://api.rubyonrails.org/classes/ActiveModel/Lint/Tests.html#method-i-test_to_param)
+Passes if the object’s model responds to [to_param](https://api.rubyonrails.org/files/activesupport/lib/active_support/core_ext/object/to_param_rb.html) and if calling this method returns `nil` when the object is not persisted. Fails otherwise.
+[to_param](https://api.rubyonrails.org/files/activesupport/lib/active_support/core_ext/object/to_param_rb.html) is used to represent the object’s key in URLs. Implementers can decide to either raise an exception or provide a default in case the record uses a composite primary key. There are no tests for this behavior in lint because it doesn’t make sense to force any of the possible implementation strategies on the implementer.
+Source: [show](javascript:toggleSource\('method-i-test_to_param_source'\)) | [on GitHub](https://github.com/rails/rails/blob/fa8f0812160665bff083a089d2bb2fc1817ea03e/activemodel/lib/active_model/lint.rb#L46)
+
+# File activemodel/lib/active_model/lint.rb, line 46
+def test_to_param
+  assert_respond_to model, :to_param
+  def_method(model, :to_key) { [1] }
+  def_method(model, :persisted?) { false }
+  assert model.to_param.nil?, "to_param should return nil when `persisted?` returns false"
+end
+```
+
+###  **test_to_partial_path**() [Link](https://api.rubyonrails.org/classes/ActiveModel/Lint/Tests.html#method-i-test_to_partial_path)
+Passes if the object’s model responds to `to_partial_path` and if calling this method returns a string. Fails otherwise.
+`to_partial_path` is used for looking up partials. For example, a BlogPost model might return “blog_posts/blog_post”.
+Source: [show](javascript:toggleSource\('method-i-test_to_partial_path_source'\)) | [on GitHub](https://github.com/rails/rails/blob/fa8f0812160665bff083a089d2bb2fc1817ea03e/activemodel/lib/active_model/lint.rb#L58)
+
+# File activemodel/lib/active_model/lint.rb, line 58
+def test_to_partial_path
+  assert_respond_to model, :to_partial_path
+  assert_kind_of String, model.to_partial_path
+end
+```

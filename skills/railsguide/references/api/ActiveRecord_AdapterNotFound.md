@@ -1,0 +1,1 @@
+Raised when Active Record cannot find database adapter specified in `config/database.yml` or programmatically.
